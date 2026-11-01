@@ -53,8 +53,13 @@ impl HuffmanDecoder {
                 }
             }
 
-            // Like libjpeg: substitute zero for the invalid code and go on.
+            // Like libjpeg: substitute zero for the invalid code and go on,
+            // past the 17 bits its search reads before it gives up.
             self.consume_bits(16);
+            if self.num_bits < 1 {
+                self.read_bits(reader)?;
+            }
+            self.consume_bits(1);
             Ok(0)
         }
     }
