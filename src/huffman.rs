@@ -53,7 +53,9 @@ impl HuffmanDecoder {
                 }
             }
 
-            Err(Error::Format("failed to decode huffman code".to_owned()))
+            // Like libjpeg: substitute zero for the invalid code and go on.
+            self.consume_bits(16);
+            Ok(0)
         }
     }
 
